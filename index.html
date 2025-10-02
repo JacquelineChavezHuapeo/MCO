@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Chávez Huapeo Jacqueline">
+<meta name="author" content="Flores Ochoa Sofia Libertad">
+<meta name="author" content="Mendoza Esteban Lizzet">
+<meta name="author" content="López Carmona Audrey Carolina">
+<meta name="author" content="Rosas Moreno Alesi">
+
+<title>Modelo de regresión por mínimos cuadrados ordinarios e identificación de los errores del modelo de acuerdo a los supuestos del Teorema Gauss-Markov.</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/quarto.js"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="index_files/libs/quarto-html/anchor.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="index_files/libs/bootstrap/bootstrap-61be8778b1349d46454b79ea987638ea.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="index.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li><li><a href="index.pptx"><i class="bi bi-file-slides"></i>Powerpoint</a></li></ul></div></div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Modelo de regresión por mínimos cuadrados ordinarios e identificación de los errores del modelo de acuerdo a los supuestos del Teorema Gauss-Markov.</h1>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Authors</div>
+  <div class="quarto-title-meta-heading">Affiliations</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Chávez Huapeo Jacqueline <a href="mailto:2002159x@umich.mx" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            2002159X
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Flores Ochoa Sofia Libertad <a href="mailto:2209997a@umich.mx" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            2209997A
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Mendoza Esteban Lizzet <a href="mailto:2111029d@umich.mx" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            2111029D
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">López Carmona Audrey Carolina <a href="mailto:2209983d@umich.mx" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            2209983D
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Rosas Moreno Alesi <a href="mailto:2209988c@umich.mx" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            2209988C
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><img src="Logo_de_la_UMSNH.png" class="img-fluid" style="width:3cm"></p>
+<section id="mco-introducción" class="level1">
+<h1>MCO Introducción</h1>
+<section id="qué-es" class="level2">
+<h2 class="anchored" data-anchor-id="qué-es">¿Qué es?</h2>
+<p>Los mínimos cuadrados ordinarios es una regresión lineal común donde se obtiene estimaciones de parámetros, que describe la relación entre una o más variables cuantitativas independiente y una variable dependiente. Su objetivo es minimizar la suma de las diferencias cuadradas entre los valores observados y estimados, considerando posibles problemas de multicolinealidad.</p>
+</section>
+<section id="cómo-se-estima" class="level2">
+<h2 class="anchored" data-anchor-id="cómo-se-estima">¿Cómo se estima?</h2>
+<p>Partimos desde una Función de Regresión muestra con sola una variable explicativa: <span class="math display">\[Y_i=\hat{\beta_1}+\hat{\beta_2}Xi+\hat{u_i}\]</span> Así <span class="math inline">\(Yi=\hat{Y_i}+\hat{u_i}\)</span> donde <span class="math inline">\(\hat{Y_i}\)</span> es el valor estimado de <span class="math inline">\(Y_i\)</span>. Expresamos los residuos <span class="math inline">\(\hat{u_i}\)</span> como <span class="math display">\[\hat{u_i}=Y_i-\hat{Y_i}=Y_i-\hat{\beta_1}-\hat{\beta_2}Xi\]</span> Con la expresión anterior, podemos notar que <span class="math inline">\(\hat{u_i}\)</span> son las diferencias entre los valores observados y los valores esperados de una varable. Por ende, nuestro objetivo es determinar que la <span class="math inline">\(\hat{Y_i}\)</span> sea lo más cercana a <span class="math inline">\(Y_i\)</span>, consecuentemente la suma de los residuos <span class="math inline">\(\sum\hat{u_i}=\sum(Y_i-\hat{Y_i})^2\)</span> debe ser lo menor posible, con <span class="math inline">\(\hat{u_i}^2\)</span> para simplificar y darle más peso a residuos más grandes. Recordemos que <span class="math inline">\(\hat{u_i}=Y_i-\hat{\beta_1}-\hat{\beta_2}Xi\)</span> entonces deducimos también que <span class="math display">\[\sum\hat{u_i}^2\]</span> será en algún tipo de función de <span class="math inline">\(\hat\beta_1\)</span> y <span class="math inline">\(\hat\beta_2\)</span> Como queremos reducir la suma de los residuos, derivamos e igualamos a para encontrar sus puntos débiles y el punto mínimo <span class="math display">\[\frac{\partial (Y_i-\hat{\beta_1}-\hat{\beta_2}Xi)^2}{\partial \hat{\beta_1}}=-2\sum(Y_i-\hat\beta_1-\hat\beta_2X_i)=-2\sum\hat u_i=0\]</span></p>
+<p>Por lo tanto obtenemos para <span class="math inline">\(\beta_1\)</span> (hay que tomar en cuenta que se supone que tenemos n observaciones): <span class="math display">\[\sum Y_i-n\hat\beta_1-\beta_2\sum X_i=0\]</span> <span class="math display">\[\sum Y_i=n\hat\beta_1+\hat\beta_2\sum X_i\]</span> Dividiendo todo por las <span class="math inline">\(n\)</span> observaciones <span class="math display">\[\bar Y=\hat\beta_1+\hat\beta_2\bar X\]</span> despejando obtenemos que: <span class="math display">\[\hat\beta_1=\bar Y+ \hat\beta_2\bar X\]</span> en el caso de la <span class="math inline">\(beta_2\)</span> con su derivada: <span class="math display">\[\frac{\partial (Y_i-\hat{\beta_1}-\hat{\beta_2}Xi)^2}{\partial \hat{\beta_2}}=-2\sum(Y_i-\hat\beta_1-\hat\beta_2X_i)X_i=-2\sum\hat u_iX_i=0\]</span></p>
+<p>desarrollamos: <span class="math display">\[\sum(X_iY_i-\hat\beta_1 X_i- \hat\beta_2 X_i^2)\]</span> <span class="math display">\[\sum(X_i Y_i)=\hat\beta_1\sum(X_i)+\hat\beta_2\sum(X_i^2)\]</span> De manera que reemplazamos con la igualdad de <span class="math inline">\(\hat\beta_1\)</span> <span class="math display">\[\sum(X_i Y_i)=(\bar Y+ \hat\beta_2\bar X)\sum(X_i)+\hat\beta_2\sum(X_i^2)\]</span> <span class="math display">\[\sum(X_i Y_i)-\bar Y\sum(X_i)= \hat\beta_2(\sum(X_i^2) - \bar X\sum(X_i)\]</span> <span class="math display">\[\hat\beta_2=\frac{\sum{X_i Y_i}-\bar Y\sum(X_i)}{\sum(X_i^2) - \bar X\sum(X_i)}\]</span></p>
+</section>
+<section id="por-qué-se-llama-así" class="level2">
+<h2 class="anchored" data-anchor-id="por-qué-se-llama-así">¿Por qué se llama así?</h2>
+<p>Como podemos observar en el la estimación de la función de regresión, el modelo le debe su nombre por su objetivo, al buscar el modelo de mejor ajuste que minimice la suma de las diferencias al cuadrado entre los valores observados y los valores esperados. El término “ordinarios” se refiere a las condiciones que el modelo aplica. Para que los estimadores (parámetros) sean óptimos y se consideren insesgados y de varianza mínima.</p>
+</section>
+</section>
+<section id="teorema-de-gauss-markov" class="level1">
+<h1>Teorema de Gauss-Markov</h1>
+<p>Dados los supuestos del modelo clásico de regresión lineal, los estimadores de mínimos cuadrados, dentro de la clase de estimadores lineales insesgados, tienen varianza mínima, es&nbsp;decir,son&nbsp;MELI.</p>
+</section>
+<section id="supuestos-del-teorema-gauss-markov" class="level1">
+<h1>Supuestos del Teorema Gauss-Markov</h1>
+<section id="linealidad-en-los-parámetros" class="level2">
+<h2 class="anchored" data-anchor-id="linealidad-en-los-parámetros">1. Linealidad en los parámetros</h2>
+<p>Establece que la relación entre las variables independientes y la variable dependiente es lineal en los parámetros del modelo. Es decir, implica que el modelo de regresión es una combinación lineal de los coeficientes de las variables independientes. Este supuesto es fundamental en la regresión lineal ordinaria, ya que el método MCO busca estimar los coeficientes de manera que la suma de los cuadrados de los residuos sea mínima, asumiendo una relación lineal entre las variables. Si este supuesto no se cumple, es decir, si la relación entre las variables no es lineal, los estimadores obtenidos mediante MCO pueden ser sesgados y poco confiables. La relación lineal implica que un cambio en una unidad en una variable independiente produce un cambio constante en la variable dependiente, manteniendo todas las demás variables independientes constantes. <span class="math display">\[
+Y_i = \beta_0 + \beta_1 X_{i} + \varepsilon_i
+\]</span></p>
+</section>
+<section id="los-valores-de-la-variable-vectorial-x-son-fijos-en-diferentes-muestras." class="level2">
+<h2 class="anchored" data-anchor-id="los-valores-de-la-variable-vectorial-x-son-fijos-en-diferentes-muestras.">2. Los valores de la variable vectorial X son fijos en diferentes muestras.</h2>
+<p>Establece que los valores de las variables explicativas se consideran fijos en muestras repetidas y son independientes del término de error o perturbación. En otras palabras, la matriz de variables explicativas se compone de un conjunto de números constantes.</p>
+</section>
+<section id="la-media-condicional-de-los-residuales-epsilon_i-es-cero" class="level2">
+<h2 class="anchored" data-anchor-id="la-media-condicional-de-los-residuales-epsilon_i-es-cero">3. La media condicional de los residuales <span class="math inline">\(\epsilon_i\)</span> es cero</h2>
+<p>Significa que, en promedio, los errores de la regresión son cero. Esto implica que la regresión no tiene un sesgo hacia arriba o hacia abajo en la predicción de los valores observados. Lo que asegura que no existe correlación entre las variables explicativas y los errores, evitando errores de especificación en el modelo.</p>
+<p><span class="math display">\[
+E(\varepsilon_i \mid X) = 0
+\]</span></p>
+</section>
+<section id="la-varianza-del-modelo-es-homoscedástica." class="level2">
+<h2 class="anchored" data-anchor-id="la-varianza-del-modelo-es-homoscedástica.">4. La varianza del modelo es homoscedástica.</h2>
+<p>Esto indica que la varianza de los errores es constante en todos los niveles de las variables independientes. Lo que significa que la dispersión de la variable dependiente alrededor de la línea de regresión es uniforme a lo largo de todo el rango de las variables explicativas. <span class="math display">\[
+\operatorname{Var}(u_i) = \sigma^2
+\]</span></p>
+</section>
+<section id="los-errores-son-no-autocorrelacionados" class="level2">
+<h2 class="anchored" data-anchor-id="los-errores-son-no-autocorrelacionados">5. Los errores son no autocorrelacionados</h2>
+<p>Se supone que los errores son independientes entre sí, de manera que la covarianza entre dos términos de perturbación cualesquiera es cero. Esto garantiza que no existen patrones sistemáticos en los errores a lo largo de las observaciones</p>
+<p><span class="math display">\[
+\operatorname{Cov}(\varepsilon_i, \varepsilon_j \mid X) = 0
+\]</span></p>
+</section>
+<section id="los-errores-son-no-correlacionados-con-las-variables-explicativas" class="level2">
+<h2 class="anchored" data-anchor-id="los-errores-son-no-correlacionados-con-las-variables-explicativas">6. Los errores son no correlacionados con las variables explicativas</h2>
+<p><em>(Exogeneidad / media condicional cero)</em></p>
+<p><span class="math display">\[
+E(\varepsilon \mid X) = 0
+\]</span> De esto se desprende que, para cada regresor <span class="math inline">\(X_k\)</span>:</p>
+<p><span class="math display">\[
+\operatorname{Cov}(\varepsilon, X_k) = 0
+\]</span></p>
+</section>
+<section id="el-número-de-observaciones-debe-ser-mayor-al-número-de-parámetros-a-estimar" class="level2">
+<h2 class="anchored" data-anchor-id="el-número-de-observaciones-debe-ser-mayor-al-número-de-parámetros-a-estimar">7. El número de observaciones debe ser mayor al número de parámetros a estimar</h2>
+<p><em>(Identificación y grados de libertad)</em></p>
+<p>Si tienes <span class="math inline">\(p\)</span> parámetros (incluyendo el intercepto) y <span class="math inline">\(n\)</span> observaciones, necesitas al menos <span class="math inline">\(n \ge p\)</span> para que el sistema no esté subdeterminado y, en la práctica, <span class="math inline">\(n &gt; p\)</span> para poder estimar la varianza del error y hacer inferencia:</p>
+<p><span class="math display">\[
+\text{grados de libertad} = n - p &gt; 0
+\]</span></p>
+<ul>
+<li>Si <span class="math inline">\(n &lt; p\)</span>: hay infinitas soluciones; OLS no es único.<br>
+</li>
+<li>Si <span class="math inline">\(n = p\)</span>: hay solución exacta, pero sin residuos <span class="math inline">\(\Rightarrow\)</span> no puedes estimar <span class="math inline">\(\sigma^2\)</span> ni <span class="math inline">\(SE\)</span>.<br>
+</li>
+<li>Con <span class="math inline">\(n\)</span> apenas mayor que <span class="math inline">\(p\)</span>: errores estándar enormes (inferencia débil).</li>
+</ul>
+</section>
+<section id="los-valores-de-cada-vector-en-x-no-son-iguales" class="level2">
+<h2 class="anchored" data-anchor-id="los-valores-de-cada-vector-en-x-no-son-iguales">8. Los valores de cada vector en <span class="math inline">\(X\)</span> no son iguales</h2>
+<p><em>(No es constante / no todos sus valores son iguales)</em></p>
+<p>Para cada columna de <span class="math inline">\(X\)</span>, debe haber variabilidad.<br>
+Si un regresor es constante (o casi), su efecto no se puede identificar (con un intercepto, una constante adicional es redundante).</p>
+<ul>
+<li>Sin variación: el coeficiente es inencontrable (columna colineal con el intercepto).<br>
+</li>
+<li>Con variación mínima: el coeficiente tendrá varianza enorme.</li>
+</ul>
+</section>
+<section id="el-modelo-está-bien-especificado" class="level2">
+<h2 class="anchored" data-anchor-id="el-modelo-está-bien-especificado">9. El modelo está bien especificado</h2>
+<p><em>(Forma funcional y variables relevantes/irrelevantes)</em></p>
+<p>La forma funcional es adecuada (lineal en parámetros; puedes incluir <span class="math inline">\(X^2\)</span>, <span class="math inline">\(\log X\)</span>, interacciones) y están incluidas las variables relevantes.<br>
+Los errores capturan ruido, no estructura sistemática.</p>
+<p><strong>Omisión de variables relevantes ⇒ sesgo de omisión</strong></p>
+<p><span class="math display">\[
+\text{Bias}(\hat\beta_1) \approx
+\beta_2 \frac{\operatorname{Cov}(X_1, X_2)}{\operatorname{Var}(X_1)}
+\]</span></p>
+</section>
+<section id="no-hay-multicolinealidad-perfecta" class="level2">
+<h2 class="anchored" data-anchor-id="no-hay-multicolinealidad-perfecta">10. No hay multicolinealidad perfecta</h2>
+<p><em>(Rango completo de <span class="math inline">\(X\)</span>)</em></p>
+<p>Ningún regresor es combinación lineal exacta de otros; <span class="math inline">\(X'X\)</span> debe ser invertible.</p>
+<ul>
+<li><strong>Perfecta:</strong> MCO no puede calcular <span class="math inline">\(\hat\beta\)</span>.<br>
+</li>
+<li><strong>Alta:</strong> <span class="math inline">\(\hat\beta\)</span> sigue insesgado pero con <span class="math inline">\(SE\)</span> enormes, signos inestables y sensibilidad a pequeñas perturbaciones.</li>
+</ul>
+</section>
+</section>
+<section id="errores-del-modelo-de-acuerdo-a-los-supuestos-del-teorema-gauss-markov" class="level1">
+<h1>Errores del modelo de acuerdo a los supuestos del Teorema Gauss-Markov</h1>
+<section id="multicolinealidad" class="level2">
+<h2 class="anchored" data-anchor-id="multicolinealidad">Multicolinealidad</h2>
+<p>La <strong>multicolinealidad</strong> ocurre cuando dos o más variables explicativas de un modelo de regresión están fuertemente correlacionadas entre sí. Esto no sesga los coeficientes, pero aumenta su <em>varianza</em>, lo que hace que las estimaciones sean imprecisas y dificulta determinar qué variables realmente influyen en la variable dependiente.</p>
+<p><strong>Ejemplo:</strong> Un modelo que predice el precio de una casa usando el tamaño en metros cuadrados y el número de habitaciones. Si ambos están fuertemente relacionados, puede ser difícil separar el efecto de cada uno sobre el precio.</p>
+<section id="identificación" class="level3">
+<h3 class="anchored" data-anchor-id="identificación">Identificación</h3>
+<ul>
+<li><strong>R² alta pero coeficientes no significativos</strong>: El modelo explica bien la variable dependiente, pero los coeficientes individuales tienen t-estadísticos pequeños.</li>
+<li><strong>Altas correlaciones entre regresoras</strong>: Correlación mayor a 0.8 puede ser indicativa de multicolinealidad severa.</li>
+<li><strong>Regresiones auxiliares (Regla de Klein)</strong>: Cada variable se regresa sobre el resto. R² alta sugiere fuerte dependencia lineal.</li>
+<li><strong>Factor de Inflación de la Varianza (FIV)</strong>: Mide cuánto se inflan los errores estándar por colinealidad. FIV &gt; 10 indica problema serio. TOL, el inverso del FIV, cercano a 0 confirma esto.</li>
+</ul>
+</section>
+<section id="consecuencias-y-corrección" class="level3">
+<h3 class="anchored" data-anchor-id="consecuencias-y-corrección">Consecuencias y corrección</h3>
+<p>La multicolinealidad puede inducir errores de interpretación. Aunque los signos de los coeficientes sean correctos, los intervalos de confianza se amplían y las decisiones basadas en significancia estadística pueden ser incorrectas.</p>
+<p><strong>Opciones de corrección:</strong> - No intervenir si el objetivo es solo predicción y los coeficientes son razonables. - Usar <strong>información a priori</strong> para imponer restricciones. - Eliminar variables altamente correlacionadas, cuidando de no omitir variables relevantes. - Transformaciones como primeras diferencias o variables per cápita. - Incrementar el tamaño de la muestra para reducir la varianza de los estimadores.</p>
+</section>
+</section>
+<section id="heterocedasticidad" class="level2">
+<h2 class="anchored" data-anchor-id="heterocedasticidad">Heterocedasticidad</h2>
+<p>La <strong>heterocedasticidad</strong> viola el supuesto de varianza constante de los errores en un modelo de regresión (homoscedasticidad). Cuando la varianza de los errores cambia según el valor de las variables explicativas, los intervalos de confianza y pruebas t pueden ser incorrectos, llevando a conclusiones erróneas.</p>
+<p><strong>Ejemplo:</strong> En un estudio sobre ingreso y ahorro, personas con ingresos altos tienden a mostrar mayor variabilidad en su ahorro que personas con ingresos bajos, generando heterocedasticidad.</p>
+<section id="identificación-1" class="level3">
+<h3 class="anchored" data-anchor-id="identificación-1">Identificación</h3>
+<p><strong>Métodos informales:</strong> - Gráficos de residuos al cuadrado vs valores estimados o regresoras. Patrones sistemáticos (cono, abanico) indican heterocedasticidad.</p>
+<p><strong>Métodos formales:</strong> - Prueba de Park: Regresión de <span class="math inline">\(\ln(\hat{u}_i^2)\)</span> sobre <span class="math inline">\(\ln(X_i)\)</span>. - Prueba de Glejser: Regresión de <span class="math inline">\(|\hat{u}_i|\)</span> sobre <span class="math inline">\(X_i\)</span>. - Prueba de White: Regresión de <span class="math inline">\(\hat{u}_i^2\)</span> sobre regresoras originales, sus cuadrados y productos cruzados.</p>
+</section>
+<section id="consecuencias-y-corrección-1" class="level3">
+<h3 class="anchored" data-anchor-id="consecuencias-y-corrección-1">Consecuencias y corrección</h3>
+<p>Errores estándar incorrectos pueden llevar a rechazar hipótesis verdaderas o aceptar hipótesis falsas.</p>
+<p><strong>Opciones de corrección:</strong> - Mínimos Cuadrados Ponderados (MCP) si se conoce la estructura de la varianza. - Errores estándar robustos (White) cuando la varianza es desconocida. - Transformaciones logarítmicas o de razón de variables para estabilizar la varianza.</p>
+</section>
+</section>
+<section id="autocorrelación" class="level2">
+<h2 class="anchored" data-anchor-id="autocorrelación">Autocorrelación</h2>
+<p>La <strong>autocorrelación</strong> ocurre cuando los errores de un modelo de regresión están correlacionados entre sí, especialmente en series de tiempo. Esto viola el supuesto de independencia de los errores y puede dar lugar a estimaciones ineficientes y pruebas de hipótesis inválidas.</p>
+<p><strong>Ejemplo:</strong> En predicciones de ventas mensuales, un error positivo en un mes suele acompañarse de un error positivo en el mes siguiente, indicando autocorrelación positiva.</p>
+<section id="identificación-2" class="level3">
+<h3 class="anchored" data-anchor-id="identificación-2">Identificación</h3>
+<ul>
+<li>Método gráfico: Residuos vs tiempo o residuos rezagados.</li>
+<li>Prueba de las rachas: Analiza secuencias de signos en los residuos.</li>
+<li>Prueba d de Durbin-Watson: <span class="math inline">\(D \approx 2\)</span> indica ausencia de autocorrelación.</li>
+<li>Prueba de Breusch-Godfrey: Permite rezagos de mayor orden y regresoras estocásticas.</li>
+</ul>
+</section>
+<section id="consecuencias-y-corrección-2" class="level3">
+<h3 class="anchored" data-anchor-id="consecuencias-y-corrección-2">Consecuencias y corrección</h3>
+<p>La autocorrelación puede inflar la significancia aparente de los coeficientes.</p>
+<p><strong>Opciones de corrección:</strong></p>
+<ul>
+<li><p>Revisar especificación del modelo (variables omitidas, forma funcional incorrecta).</p></li>
+<li><p>Mínimos Cuadrados Generalizados (MCG) o Factibles (MCGF).</p></li>
+<li><p>Método de Newey-West para muestras grandes.</p></li>
+<li><p>Conservar MCO si <span class="math inline">\(\rho &lt; 0.3\)</span> en muestras pequeñas.</p></li>
+</ul>
+</section>
+</section>
+<section id="error-de-especificación" class="level2">
+<h2 class="anchored" data-anchor-id="error-de-especificación">Error de Especificación</h2>
+<p>Un <strong>error de especificación</strong> es una violación al <strong>Supuesto 9 del MCRL</strong>, que establece que <em>“el modelo está correctamente especificado, por lo que no hay sesgo de especificación”</em>.<br>
+Cuando ocurre un error de especificación:<br>
+- Se violan los supuestos del MCRL.<br>
+- El estimador de <strong>MCO pierde la propiedad de ser MELI</strong> (insesgado y de varianza mínima).</p>
+<p>Las consecuencias específicas dependen del <strong>tipo de error de especificación</strong>.</p>
+<section id="tipos-de-errores-de-especificación" class="level3">
+<h3 class="anchored" data-anchor-id="tipos-de-errores-de-especificación">Tipos de Errores de Especificación</h3>
+<p>Los errores más comunes, que invalidan las propiedades óptimas del estimador MCO, incluyen:</p>
+<section id="omisión-de-una-variable-relevante-subajuste" class="level4">
+<h4 class="anchored" data-anchor-id="omisión-de-una-variable-relevante-subajuste">1. Omisión de una Variable Relevante (Subajuste)</h4>
+<p>Este es el error de especificación más grave. Ocurre cuando se excluye una variable explicativa importante que sí influye en la variable dependiente.</p>
+<p><strong>Consecuencias</strong><br>
+- Los estimadores de Mínimos Cuadrados Ordinarios (MCO) de los coeficientes incluidos están sesgados e inconsistentes.<br>
+- La varianza y los errores estándar de los coeficientes se estiman incorrectamente, invalidando las pruebas de hipótesis habituales (como las pruebas t).</p>
+<p><strong>Solución y Detección</strong><br>
+1. <strong>Detección por Residuos:</strong> Se debe examinar la gráfica de los residuos (<span class="math inline">\(u_i\)</span>) del modelo inicial. Si existe un error de omisión, los residuos suelen mostrar un patrón distinguible (giros cíclicos o parabólicos), lo que sugiere que la variable omitida está capturada en el término de error.<br>
+2. <strong>Detección por Durbin-Watson (d):</strong> Un valor muy bajo de <span class="math inline">\(d\)</span> puede indicar “correlación” positiva en los residuos, que en este contexto refleja un error de especificación (forma funcional incorrecta o variable omitida).<br>
+3. <strong>Remedio:</strong> Identificar e incluir la variable relevante omitida o corregir la forma funcional si el error se debe a haber elegido una forma demasiado simple (ejemplo: lineal en lugar de cuadrática o cúbica).</p>
+</section>
+<section id="inclusión-de-una-variable-irrelevante-sobreajuste" class="level4">
+<h4 class="anchored" data-anchor-id="inclusión-de-una-variable-irrelevante-sobreajuste">2. Inclusión de una Variable Irrelevante (Sobreajuste)</h4>
+<p>Ocurre cuando se incluye en el modelo una variable explicativa que no tiene un impacto significativo sobre la variable dependiente.</p>
+<p><strong>Consecuencias</strong><br>
+- Los estimadores de MCO siguen siendo insesgados y consistentes.<br>
+- El principal problema es la <strong>ineficiencia</strong>: las varianzas de los estimadores aumentan, debilitando las pruebas de hipótesis.<br>
+- El <span class="math inline">\(R^2\)</span> aumenta, pero el <span class="math inline">\(R^2\)</span> ajustado (<span class="math inline">\(\bar{R}^2\)</span>) puede disminuir o no mejorar significativamente.</p>
+<p><strong>Solución y Detección</strong><br>
+1. <strong>Detección:</strong> Realizar pruebas t sobre el coeficiente de la variable sospechosa. Si no es estadísticamente significativo (p-valor alto), la variable es irrelevante.<br>
+2. <strong>Prueba F:</strong> Para verificar la significancia conjunta de un grupo de variables irrelevantes, se puede usar la prueba F o comparar el <span class="math inline">\(R^2\)</span> del modelo restringido (sin variables) con el no restringido (con variables).<br>
+3. <strong>Remedio:</strong> Eliminar la variable irrelevante y optar por un modelo más parsimonioso.</p>
+</section>
+<section id="adopción-de-la-forma-funcional-equivocada" class="level4">
+<h4 class="anchored" data-anchor-id="adopción-de-la-forma-funcional-equivocada">3. Adopción de la Forma Funcional Equivocada</h4>
+<p>Implica seleccionar una relación matemática que no se ajusta a los datos (ejemplo: usar un modelo lineal cuando la verdadera relación es log-lineal o polinomial).</p>
+<p><strong>Solución y Detección</strong><br>
+- <strong>Detección:</strong> El análisis de residuos es fundamental para identificar patrones que indiquen una mala especificación.<br>
+- <strong>Remedio:</strong> Probar formas funcionales alternativas (log-lineales, semi-logarítmicas, recíprocas, polinomiales) y utilizar criterios de selección como:<br>
+- Criterio de Información Akaike (CIA)<br>
+- Criterio de Información Schwarz (CIS)<br>
+- Criterio Cp de Mallows<br>
+- <span class="math inline">\(R^2\)</span> ajustado (<span class="math inline">\(\bar{R}^2\)</span>), que penaliza la inclusión de variables innecesarias</p>
+</section>
+</section>
+</section>
+</section>
+<section id="supuestos-que-se-infringen-con-los-errores" class="level1">
+<h1>Supuestos que se infringen con los errores</h1>
+<section id="error-de-especificación-1" class="level2">
+<h2 class="anchored" data-anchor-id="error-de-especificación-1">Error de Especificación</h2>
+<p>Es cuando el modelo que estás usando no representa adecuadamente la realidad o el fenómeno que deseas analizar. Este comete una violación al supuesto 1 de linealidad en los parámetros y a su vez el 9 que nos dice que el modelo está bien especificado. El error de especificación puede violar el supuesto de linealidad en los parámetros directamente, si los parámetros aparecen en formas no lineales, o indirectamente, al usar una forma funcional incorrecta se distorsiona la relación entre variables y parámetros. por ejemplo, si se omite una variable que tiene una relación no lineal con Y, el modelo mal especificado puede inducir una relación compleja y no lineal (implícita) con los parámetros estimados, violando de nuevo la linealidad de forma práctica, aunque no en la estructura de la ecuación como tal.</p>
+</section>
+<section id="error-de-multicolinealidad" class="level2">
+<h2 class="anchored" data-anchor-id="error-de-multicolinealidad">Error de Multicolinealidad</h2>
+<p>La multicolinealidad se refiere a la violación del supuesto 10 del modelo clásico de regresión. La principal implicación es ver que quizá el modelo logrado tiene un grado de explicación alto pero la mayoría de las regresoras pueden ser no significativas (diferentes de cero). Este error se da cuando en los modelos de regresión dos o más variables explicativas están altamente correlacionadas entre sí. Es decir, que una variable independiente puede ser explicada en gran parte por otra(s), lo cual genera problemas al estimar los coeficientes del modelo. Si hay multicolinealidad perfecta, pues es una violación directa al supuesto, sin embargo si la multicolinealidad es alta, pero no perfecta, produce coeficientes inestables, errores estándar grandes y mala precisión en las inferencias</p>
+</section>
+<section id="error-de-heterocedasticidad" class="level2">
+<h2 class="anchored" data-anchor-id="error-de-heterocedasticidad">Error de Heterocedasticidad</h2>
+<p>Este error viola directamente el supuesto 4. Pues la heteroscedasticidad ocurre cuando la varianza del término de error no es constante a lo largo de las observaciones. Es decir <span class="math inline">\(Var(\epsilon_i)\neq \sigma^2\)</span> lo que nos indica que los errores (residuos) del modelo tienen una dispersión diferente dependiendo del valor de alguna variable independiente. Y aunque la heteroscedasticidad no sesga los coeficientes estimados por MCO (es decir, siguen siendo insesgados), sí afecta su eficiencia: ya que los estimadores MCO ya no son los de varianza mínima (Pierden la propiedad de ser BLUE), Los errores estándar de los coeficientes son incorrectos (afecta los intervalos de confianza y los tests de hipótesis) y se pueden cometer errores al interpretar significancia estadística (creer que una variable no es significativa cuando sí lo es y viceversa)</p>
+</section>
+<section id="error-de-autocorrelación" class="level2">
+<h2 class="anchored" data-anchor-id="error-de-autocorrelación">Error de Autocorrelación</h2>
+<p>La autocorrelación se presenta cuando los errores del modelo están correlacionados entre sí a lo largo de las observaciones. Es decir, el error en un periodo está relacionado con el error en otro lo que viola el supuesto 6 del Teorema de Gauss-Markov que nos dice que los errores son no correlacionados con las variables explicativas. Esto ocasiona que los MCO dejen de ser eficientes ya que los errores estándar suelen estar mal estimados lo que afecta directamente la significancia estadística e intervalos de confianza. En pocas palabras, se pierde precisión y confiabilidad en la inferencia estadística.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
